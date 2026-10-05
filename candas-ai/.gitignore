@@ -1,0 +1,35 @@
+# --- Secrets / local configuration (never commit real keys) ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+.coverage
+htmlcov/
+
+# --- Node / frontend ---
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# --- Celery Beat runtime files ---
+celerybeat-schedule*
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Large media: attach to a GitHub Release or link from the README instead ---
+*.mp4
+*.mov

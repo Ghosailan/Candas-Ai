@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: campaign
+      POSTGRES_PASSWORD: campaign
+      POSTGRES_DB: campaign_test
+    ports: ["55432:5432"]
+  redis:
+    image: redis:7-alpine
+    ports: ["56379:6379"]

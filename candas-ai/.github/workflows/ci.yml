@@ -1,0 +1,36 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: campaign
+          POSTGRES_PASSWORD: campaign
+          POSTGRES_DB: campaign_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U campaign -d campaign_test"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -U pip && pip install ".[dev]"
+      - run: ruff check .
+      - run: mypy app
+      - run: pytest tests/unit
+      - run: pytest tests/integration
+      - run: pytest tests/evals
+      - name: Build Docker image
+        run: docker build -t agentic-campaign-manager:${{ github.sha }} .
